@@ -5,7 +5,7 @@ import keyboard
 
 
 COIN_ADDRESS = 0x28CAD4
-GEM_ADDRESS = 0x28CAD4
+GEM_ADDRESS = 0x28CAEC
 GAS_BASE = 0x28CA2C
 GAS_OFFSET = 0x2A8
 
@@ -24,7 +24,6 @@ hill_climb_racing = None
 while hill_climb_racing is None:
     try:
         hill_climb_racing = pymem.Pymem("HillClimbRacing.exe")
-        print(hill_climb_racing)
     except Exception:
         continue
 
@@ -35,10 +34,9 @@ def get_gas_address():
 
 
 root = customtkinter.CTk()
-print(hill_climb_racing)
-root.geometry("300x250")
+root.geometry("300x230")
 root.title("Hill Climb Racing Cheat")
-root.minsize(300, 250)
+root.resizable(False, False)
 root.attributes('-topmost', 1)
 root.iconbitmap("C:\\Users\\danie\\OneDrive\\Documents\\Hill Climb Racing Cheat\\src\\car.ico")
 
@@ -50,16 +48,17 @@ customtkinter.set_default_color_theme("green")
 
 
 def clean_entry(entry_data: str) -> int:
+    max_int_value: int = 2_147_483_647
     if not entry_data.isdecimal():
         return 123456
     num_value = int(entry_data)
-    if num_value > 2147483647:
-        num_value = 214783647
+    if num_value > max_int_value:
+        num_value = max_int_value
     return num_value
 
 
 coin_entry = customtkinter.CTkEntry(master=root, placeholder_text="Enter Coin Amount Here")
-coin_entry.grid(row=0, column=0, padx=20, pady=20, sticky="ew")
+coin_entry.grid(row=0, column=0, padx=20, pady=10, sticky="ew")
 
 
 def set_coins():
@@ -67,18 +66,18 @@ def set_coins():
 
 
 coin_button = customtkinter.CTkButton(master=root, text="Set Coins", command=set_coins)
-coin_button.grid(row=0, column=1, padx=20, pady=20, sticky="ew")
+coin_button.grid(row=0, column=1, padx=20, pady=10, sticky="ew")
 
 gem_entry = customtkinter.CTkEntry(master=root, placeholder_text="Enter Gem Amount Here")
-gem_entry.grid(row=1, column=0, padx=20, pady=20, sticky="ew")
+gem_entry.grid(row=1, column=0, padx=20, pady=10, sticky="ew")
 
 
 def set_gems():
     hill_climb_racing.write_int(hill_climb_racing.base_address + GEM_ADDRESS, clean_entry(gem_entry.get()))
 
 
-gem_button = customtkinter.CTkButton(master=root, text="Set Gems", command=set_gems(), state="disabled") # TODO: fix gem address and button state
-gem_button.grid(row=1, column=1, padx=20, pady=40, sticky="ew")
+gem_button = customtkinter.CTkButton(master=root, text="Set Gems", command=set_gems)
+gem_button.grid(row=1, column=1, padx=20, pady=10, sticky="ew")
 
 
 def reset_gas():
